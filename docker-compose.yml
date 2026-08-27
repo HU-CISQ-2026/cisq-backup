@@ -1,0 +1,24 @@
+# Met "docker compose up db" wordt alleen de ontwikkeldatabase gestart.
+services:
+  db:
+    image: postgres
+    ports:
+      # Hiermee kun je vanaf je computer verbinden met 'localhost:15432';
+      # het verkeer wordt doorgestuurd naar containerpoort 5432.
+      - "15432:5432"
+    environment:
+      # De databasebeheerder gebruikt de gebruikersnaam postgres en het wachtwoord admin.
+      # Het account voor de applicatie wordt geconfigureerd in init.sql.
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      # Verplicht volume: maakt de oorspronkelijke database en gebruiker aan.
+      - "./database/mount:/docker-entrypoint-initdb.d"
+      # Optioneel volume: bewaart gegevens tussen Docker-uitvoeringen.
+      - "./database/data:/var/lib/postgresql/data"
+
+  api:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    # TODO operations: configureer de databaseverbinding via omgevingsvariabelen.

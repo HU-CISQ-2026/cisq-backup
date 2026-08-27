@@ -1,0 +1,7 @@
+POST http://localhost:8080/uno/games
+Content-Type: application/json
+X-User: freezeybob
+
+{
+    "usernames": ["flyingalice", "freezeybob", "charlieischarlie"]
+}
